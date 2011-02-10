@@ -1,0 +1,12 @@
+<div class="insert-service" >
+    <h2>#i18n{insertalbum.introduction.title}</h2>
+    <form method="get" action="jsp/admin/plugins/insertalbum/DoInsertMap.jsp" id="myForm">
+    	<input type="hidden" name="input" value="${input}" />
+        <input type="submit" value="#i18n{insertalbum.begin}" />
+    </form>
+    <script>
+		window.onload=function() {
+			document.forms.myForm.submit();
+		}
+    </script>
+</div>

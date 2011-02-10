@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+	<properties>
+		<title>Lutèce : insert album</title>
+	</properties>
+	<body>
+		<section name="Projet insert album">
+			<p>
+				Allow to insert images stored in documents in a page via a "insert service" button. 
+			</p>
+			<p>
+				Images are shown by jQuery plugins.
+			</p>
+		</section>
+	</body>
+</document>  

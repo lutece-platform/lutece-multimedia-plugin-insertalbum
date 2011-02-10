@@ -1,0 +1,47 @@
+<html>
+<head>
+	<base href="${baseUrl}/" />
+	<link rel="stylesheet" type="text/css" href="css/portal_admin.css">
+</head>
+<body class="insert-service" >
+<div class="insert-service">
+    <h2>#i18n{insertalbum.chooseslideshow}</h2>
+	<form action="jsp/admin/plugins/insertalbum/DoInsertMap2.jsp" name="chooseSlideshowForm">
+	<input type="hidden" name="input" value="${input}" />
+	<input type="hidden" name="browser_selected_space_id" value="${browser_selected_space_id}" />
+	<#list slideshow_list as slideshow >
+		<label for="${slideshow}">${slideshow}</label><input type="radio" name="slideshow" value="${slideshow}" id="${slideshow}" onclick="changeSlideshow(this)" ><br />
+	</#list>
+	<input type="submit" value="#i18n{insertalbum.chooseslideshow}" />
+	</form>
+	<iframe id="iframe" src="" width="100%" height="600"></iframe>
+	<div>
+		<b>GalleryViewPolaroid</b> affiche des images au format 469x452 (px)<br />
+		<b>GalleryViewPanelOnly</b> affiche des images au format 800x300<br />
+		<b>GalleryViewFilmStrip</b> affiche des images au format 100x100<br />
+	</div>
+</div>
+<script>
+function changeSlideshow(element)
+{
+	var iframe = document.getElementById("iframe");
+	var iFrameSrc = "jsp/admin/plugins/insertalbum/DoGetSlideshow.jsp?browser_selected_space_id=${browser_selected_space_id}";
+	var slideshowName = "pikachoose";
+	var radios = document.forms.chooseSlideshowForm.slideshow;
+	for (var i=0; i<radios.length; i++) 
+	{
+        if (radios[i].checked)
+		{
+        	slideshowName = radios[i].value;
+        }
+     }
+	iFrameSrc += "&slideshow=" + slideshowName;
+	iframe.setAttribute("src", iFrameSrc);
+}
+
+window.moveTo(0, 0);
+window.resizeTo(screen.width, screen.height);
+
+</script>
+</body>
+</html>

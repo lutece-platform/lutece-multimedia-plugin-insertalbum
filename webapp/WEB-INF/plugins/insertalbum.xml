@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?><plug-in>
+    <name>insertalbum</name>
+    <class>fr.paris.lutece.portal.service.plugin.PluginDefaultImplementation</class>
+    <version>1.1.2</version>
+    <description>insertalbum.plugin.description</description>
+    <documentation/>
+    <installation/>
+    <changes/>
+    <user-guide/>
+    <provider>insertalbum.plugin.provider</provider>
+    <provider-url>http://lutece.paris.fr</provider-url>
+    <icon-url>images/admin/skin/plugins/insertalbum/insertalbum.png</icon-url>
+    <copyright>Copyright 2001-2009 Mairie de Paris</copyright>
+    <core-version-dependency>
+		<min-core-version>2.3.0</min-core-version>
+		<max-core-version/>	
+	</core-version-dependency>
+    <db-pool-required>0</db-pool-required>
+	<javascript-files>
+		<javascript-file>plugin-insertalbum/insertalbum.js</javascript-file> 
+	</javascript-files>
+    <insert-services>
+        <insert-service>
+            <insert-service-id>INSERT_ALBUM</insert-service-id>
+            <insert-service-name>insertalbum.insertAlbum.name</insert-service-name>
+            <insert-service-bean-class>fr.paris.lutece.plugins.insertalbum.web.InsertAlbumJspBean</insert-service-bean-class>
+            <insert-service-label>insertalbum.insertAlbum.label</insert-service-label>
+        </insert-service>
+    </insert-services>
+</plug-in>
