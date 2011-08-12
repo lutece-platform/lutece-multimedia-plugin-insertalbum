@@ -40,8 +40,8 @@
 	</dependencies>
 	<properties>
 		<componentName>insertalbum</componentName>
-		<jiraProjectName>LUTECE</jiraProjectName>
-		<jiraComponentId>10045</jiraComponentId>
+		<jiraProjectName>INSERTALBUM</jiraProjectName>
+		<jiraComponentId>10215</jiraComponentId>
 	</properties>
     <scm>
         <connection>scm:svn:http://dev.lutece.paris.fr/svn/lutece/portal/trunk/plugins/cms/plugin-insertalbum</connection>
