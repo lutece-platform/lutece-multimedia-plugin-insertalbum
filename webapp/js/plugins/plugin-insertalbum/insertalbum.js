@@ -32,14 +32,14 @@ function loadScriptForGalleryView1()
 
 $(document).ready(function () 
 {
-	if( document.getElementById("albumLutecePopeye") != null )
+	if( $('.ppy').length != 0 )
 	{
 		$.ajaxSetup({async: false});
-		loadcssfile("js/plugins/plugin-insertalbum/jquery.popeye.1.0/css/jquery.popeye.css");
-		loadcssfile("js/plugins/plugin-insertalbum/jquery.popeye.1.0/css/jquery.popeye.style.css");
-		$.getScript("js/plugins/plugin-insertalbum/jquery.popeye.1.0/lib/jquery.popeye-1.0.min.js");
+		loadcssfile("css/plugins/plugin-insertalbum/jquery.popeye.css");
+		loadcssfile("css/plugins/plugin-insertalbum/jquery.popeye.style.css");
+		$.getScript("js/plugins/plugin-insertalbum/jquery.popeye-2.0.4.min.js");
 		$.ajaxSetup({async: true});
-		$('#albumLutecePopeye').popeye();
+		$('.ppy').popeye();
 	}
 
 	/* http://spaceforaname.com/galleryview */
