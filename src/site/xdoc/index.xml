@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document>
 	<properties>
-		<title>Lutèce : insert album</title>
+		<title>Plugin insertalbum</title>
 	</properties>
 	<body>
-		<section name="Projet insert album">
-			<p>
-				Allow to insert images stored in documents in a page via a "insert service" button. 
-			</p>
-			<p>
-				Images are shown by jQuery plugins.
-			</p>
+		<section name="Plugin insertalbum">
+			<subsection name="Introduction">
+				<p>
+					Allow to insert images stored in documents in a page via a "insert
+					service" button.
+				</p>
+				<p>
+					Images are shown by jQuery plugins.
+				</p>
+			</subsection>
 		</section>
 	</body>
 </document>  

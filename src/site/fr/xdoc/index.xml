@@ -4,29 +4,42 @@
 		<title>Lutèce : insert album</title>
 	</properties>
 	<body>
-		<section name="Projet insert album">
-			<p>
-			Le plugin-insertalbum est un plugin qui permet d'ajouter des galeries d'images animées
-			depuis des images publiées dans un espace de document (du plugin-document). 
-			</p>
-			<p>
-			Pour créer un album de ce type, suivre les étapes suivantes :
-			<ol>
-                <li>activez et donnez vous les droits pour plugin-document, plugin-html et plugin-insertalbum.</li>
-                <li>ajouter et publier des images dans un espace de document (voir documentation de plugin-document)</li>
-                <li>dans l'administration du site, editer la portlet HTML dans laquelle vous désirez insérer un album</li>
-                <li>dans l'éditeur de contenu HTML, cliquer sur l'icone orange "ajouter des liens internes à Lutece"</li>
-                <li>dans la popup qui vient de s'ouvrir, choisissez "Un album d'images depuis un espace de travail"</li>
-                <li>parcourez l'arborescence d'espace de travail de plugin-document pour trouver l'espace ou vous avez publié vos images</li>
-                <li>choisissez l'album qui vous convient</li>
-            </ol>
-			</p>
-			<p>
-			La liste des slideshows disponibles est paramétrable via le properties du fichier WEB-INF/conf/plugins/inseralbum.properties<br />
-			<pre>
-			insertalbum.slideshows=Popeye,GalleryView,GalleryViewPolaroid,GalleryViewPanelOnly,GalleryViewFilmStrip
-			</pre>
-			</p>
+		<section name="Plugin insertalbum">
+			<subsection name="Introduction">
+				Le plugin-insertalbum est un plugin qui permet d'ajouter des galeries
+				d'images animées
+				depuis des images publiées dans un espace de document (du
+				plugin-document).
+			</subsection>
+			<subsection name="Usage">
+				<p>
+					Pour créer un album de ce type, suivre les étapes suivantes :
+					<ol>
+						<li>activez et donnez vous les droits pour plugin-document,
+							plugin-html et plugin-insertalbum.</li>
+						<li>ajouter et publier des images dans un espace de document (voir
+							documentation de plugin-document)</li>
+						<li>dans l'administration du site, editer la portlet HTML dans
+							laquelle vous désirez insérer un album</li>
+						<li>dans l'éditeur de contenu HTML, cliquer sur l'icone orange
+							"ajouter des liens internes à Lutece"</li>
+						<li>dans la popup qui vient de s'ouvrir, choisissez "Un album
+							d'images depuis un espace de travail"</li>
+						<li>parcourez l'arborescence d'espace de travail de
+							plugin-document pour trouver l'espace ou vous avez publié vos
+							images</li>
+						<li>choisissez l'album qui vous convient</li>
+					</ol>
+				</p>
+				<p>
+					La liste des slideshows disponibles est paramétrable via le
+					properties du fichier WEB-INF/conf/plugins/inseralbum.properties
+					<br />
+					<pre>
+						insertalbum.slideshows=Popeye,GalleryView,GalleryViewPolaroid,GalleryViewPanelOnly,GalleryViewFilmStrip
+					</pre>
+				</p>
+			</subsection>
 		</section>
 	</body>
 </document>  
