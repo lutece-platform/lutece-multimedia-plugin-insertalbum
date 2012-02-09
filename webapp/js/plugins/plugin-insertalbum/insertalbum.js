@@ -108,4 +108,24 @@ $(document).ready(function ()
 			pause_on_hover: true
 		});
 	}
+
+	/* http://fotoramajs.com/ */
+	if( document.getElementById("fotorama") != null )
+	{
+		$.ajaxSetup({async: false});
+		loadcssfile("css/plugins/plugin-insertalbum/fotorama.css");
+		$.getScript("js/plugins/plugin-insertalbum/fotorama.js");
+		$.ajaxSetup({async: true});
+		$('#fotorama').fotorama({resize: true});
+	}
+
+	/* http://projects.craftedpixelz.co.uk/craftyslide/ */
+	if( document.getElementById("craftyslide") != null )
+	{
+		$.ajaxSetup({async: false});
+		loadcssfile("css/plugins/plugin-insertalbum/craftyslide.css");
+		$.getScript("js/plugins/plugin-insertalbum/craftyslide.min.js");
+		$.ajaxSetup({async: true});
+		$('#craftyslide').craftyslide();
+	}
 });
