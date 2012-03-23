@@ -128,4 +128,21 @@ $(document).ready(function ()
 		$.ajaxSetup({async: true});
 		$('#craftyslide').craftyslide();
 	}
+
+	/* http://coffeescripter.com/code/ad-gallery/ */
+	if( document.getElementById("ad-gallery") != null )
+	{
+		$.ajaxSetup({async: false});
+		loadcssfile("js/plugins/plugin-insertalbum/jquery.ad-gallery/jquery.ad-gallery.css");
+		$.getScript("js/plugins/plugin-insertalbum/jquery.ad-gallery/jquery.ad-gallery.pack.js");
+		$.ajaxSetup({async: true});
+		$('.ad-gallery').adGallery({
+			slideshow : {
+				autostart : true,
+				speed : 5000,
+				start_label : 'Début',
+				stop_label : 'Fin',
+			}
+		});
+	}
 });
