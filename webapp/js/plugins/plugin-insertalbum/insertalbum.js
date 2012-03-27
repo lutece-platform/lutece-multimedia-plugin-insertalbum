@@ -136,13 +136,10 @@ $(document).ready(function ()
 		loadcssfile("js/plugins/plugin-insertalbum/jquery.ad-gallery/jquery.ad-gallery.css");
 		$.getScript("js/plugins/plugin-insertalbum/jquery.ad-gallery/jquery.ad-gallery.pack.js");
 		$.ajaxSetup({async: true});
-		$('.ad-gallery').adGallery({
-			slideshow : {
-				autostart : true,
-				speed : 5000,
-				start_label : 'Début',
-				stop_label : 'Fin',
-			}
-		});
+		$('.ad-gallery').adGallery({slideshow : {
+            autostart: true,
+            start_label: '',
+            stop_label: '',
+          }});
 	}
 });
