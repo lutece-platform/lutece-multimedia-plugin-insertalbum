@@ -290,7 +290,7 @@
 
 .fotorama__thumbs_previews .fotorama__thumb-border {
 	border: solid;
-	border-color: #00d1ff #00afea #008ed6;
+	border-color: #808080;
 	background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, rgba(255, 255,
 		255, 0.25) ), color-stop(100%, rgba(55, 55, 55, 0.05) ) );
 	background: -webkit-linear-gradient(rgba(255, 255, 255, 0.25),
