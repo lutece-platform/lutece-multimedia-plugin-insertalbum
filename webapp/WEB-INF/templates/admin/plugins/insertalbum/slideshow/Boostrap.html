@@ -1,0 +1,11 @@
+<div id="myCarousel" class="carousel slide">
+	<div class="carousel-inner">
+		<#list images_list as image >
+		<div class="item">
+			<img src="document?id=${image.id}" alt="" />
+			<div class="carousel-caption">${image.comment}</div>
+		</div>
+		</#list>
+	</div>
+	<a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a> <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+</div>
