@@ -1,7 +1,7 @@
 <div id="myCarousel" class="carousel slide">
 	<div class="carousel-inner">
 		<#list images_list as image >
-		<div class="item">
+		<div class="<#if image_index == 0>active </#if>item">
 			<img src="document?id=${image.id}" alt="" />
 			<div class="carousel-caption"><p>${image.comment}</p></div>
 		</div>
