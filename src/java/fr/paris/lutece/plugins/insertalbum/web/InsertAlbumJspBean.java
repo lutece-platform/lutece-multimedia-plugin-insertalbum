@@ -63,7 +63,7 @@ import javax.servlet.http.HttpServletRequest;
 public class InsertAlbumJspBean extends InsertServiceJspBean implements InsertServiceSelectionBean
 {
     private static final String SLIDESHOW = "slideshow";
-	private static final long serialVersionUID = -3189672631047661765L;
+    private static final long serialVersionUID = -3189672631047661765L;
     private static final String TEMPLATE_SELECTOR_PAGE = "admin/plugins/insertalbum/selector.html";
     private static final String TEMPLATE_PRESENTATION = "admin/plugins/insertalbum/presentation.html";
 
