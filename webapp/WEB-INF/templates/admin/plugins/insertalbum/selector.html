@@ -1,16 +1,10 @@
-<html>
-<head>
-	<base href="${baseUrl}/" />
-	<link rel="stylesheet" type="text/css" href="css/portal_admin.css">
-</head>
-<body class="insert-service" >
 <div class="insert-service">
     <h2>#i18n{insertalbum.chooseslideshow}</h2>
-	<form action="jsp/admin/plugins/insertalbum/DoInsertMap2.jsp" name="chooseSlideshowForm">
+	<form action="jsp/admin/plugins/insertalbum/DoInsertAlbum2.jsp" name="chooseSlideshowForm">
 	<input type="hidden" name="input" value="${input}" />
 	<input type="hidden" name="browser_selected_space_id" value="${browser_selected_space_id}" />
 	<#list slideshow_list as slideshow >
-		<label for="${slideshow}">${slideshow}</label><input type="radio" name="slideshow" value="${slideshow}" id="${slideshow}" onclick="changeSlideshow(this)" ><br />
+		<div><label for="${slideshow}"><input type="radio" name="slideshow" value="${slideshow}" id="${slideshow}" onclick="changeSlideshow(this)" > ${slideshow}</label></div>
 	</#list>
 	<input type="submit" value="#i18n{insertalbum.chooseslideshow}" />
 	</form>
@@ -21,7 +15,7 @@ function changeSlideshow(element)
 {
 	var iframe = document.getElementById("iframe");
 	var iFrameSrc = "jsp/admin/plugins/insertalbum/DoGetSlideshow.jsp?browser_selected_space_id=${browser_selected_space_id}";
-	var slideshowName = "pikachoose";
+	var slideshowName = "Bootstrap";
 	var radios = document.forms.chooseSlideshowForm.slideshow;
 	for (var i=0; i<radios.length; i++) 
 	{
@@ -34,9 +28,7 @@ function changeSlideshow(element)
 	iframe.setAttribute("src", iFrameSrc);
 }
 
-window.moveTo(0, 0);
-window.resizeTo(screen.width, screen.height);
+//window.moveTo(0, 0);
+//window.resizeTo(screen.width, screen.height);
 
 </script>
-</body>
-</html>

@@ -2,7 +2,9 @@
 <jsp:include page="../../insert/InsertServiceHeader.jsp" />
 
 <jsp:useBean id="albumajax" scope="session" class="fr.paris.lutece.plugins.insertalbum.web.InsertAlbumJspBean" />
-<%= albumajax.doGetSlideshow( request ) %>
+<%= albumajax.getSpaceBrowser( request ) %>
 
 </body>
 </html>
+
+
