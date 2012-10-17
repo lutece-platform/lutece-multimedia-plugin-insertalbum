@@ -1,18 +1,23 @@
 <div class="insert-service">
-    <h2>#i18n{insertalbum.chooseslideshow}</h2>
 	<form action="jsp/admin/plugins/insertalbum/DoInsertAlbum2.jsp" name="chooseSlideshowForm">
 	<input type="hidden" name="input" value="${input}" />
 	<input type="hidden" name="browser_selected_space_id" value="${browser_selected_space_id}" />
+    <h4>#i18n{insertalbum.chooseslideshow}</h4>
+	<ul class="unstyled">
 	<#list slideshow_list as slideshow >
-		<div><label for="${slideshow}"><input type="radio" name="slideshow" value="${slideshow}" id="${slideshow}" onclick="changeSlideshow(this)" > ${slideshow}</label></div>
+		<li>
+			<label class="radio" for="${slideshow}">${slideshow}
+				<input type="radio" name="slideshow" value="${slideshow}" id="${slideshow}" onclick="changeSlideshow(this)" > 
+			</label>
+		</li>
 	</#list>
-	<input type="submit" value="#i18n{insertalbum.chooseslideshow}" />
+	</ul>
+	<button type="submit" class="btn btn-primary btn-small"><i class="icon-ok icon-white"></i>&nbsp;#i18n{insertalbum.chooseslideshow}</button>
 	</form>
-	<iframe id="iframe" src="" width="100%" height="600"></iframe>
+	<iframe id="iframe" src="" width="100%" height="400"></iframe>
 </div>
 <script>
-function changeSlideshow(element)
-{
+function changeSlideshow(element){
 	var iframe = document.getElementById("iframe");
 	var iFrameSrc = "jsp/admin/plugins/insertalbum/DoGetSlideshow.jsp?browser_selected_space_id=${browser_selected_space_id}";
 	var slideshowName = "Bootstrap";
