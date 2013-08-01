@@ -62,3 +62,6 @@
 	border-top: 1px solid #000;
 	background: rgba(0, 0, 0, 0.6);
 }
+
+/* Pour IE < IE9 */
+#craftyslide .caption {background-color:#C0C0C0\9;}
