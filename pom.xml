@@ -8,7 +8,7 @@
 	<groupId>fr.paris.lutece.plugins</groupId>
 	<artifactId>plugin-insertalbum</artifactId>
 	<packaging>lutece-plugin</packaging>
-	<version>1.1.6-SNAPSHOT</version>
+	<version>1.1.6</version>
 	<name>Lutece insertalbum plugin</name>
 	<repositories>
 		<repository>
@@ -55,8 +55,8 @@
 		<jiraComponentId>10215</jiraComponentId>
 	</properties>
     <scm>
-        <connection>scm:svn:http://dev.lutece.paris.fr/svn/lutece/portal/trunk/plugins/cms/plugin-insertalbum</connection>
-        <developerConnection>scm:svn:https://dev.lutece.paris.fr/svn/lutece/portal/trunk/plugins/cms/plugin-insertalbum</developerConnection>
-        <url>http://dev.lutece.paris.fr/viewvc/lutece/portal/trunk/plugins/cms/plugin-insertalbum</url>
+        <connection>scm:svn:http://dev.lutece.paris.fr/svn/lutece/portal/tags/plugin-insertalbum-1.1.6</connection>
+        <developerConnection>scm:svn:https://dev.lutece.paris.fr/svn/lutece/portal/tags/plugin-insertalbum-1.1.6</developerConnection>
+        <url>http://dev.lutece.paris.fr/viewvc/lutece/portal/tags/plugin-insertalbum-1.1.6</url>
     </scm>
 </project>
