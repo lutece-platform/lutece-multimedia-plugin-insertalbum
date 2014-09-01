@@ -1,33 +1,51 @@
-<div class="insert-service">
-	<form action="jsp/admin/plugins/insertalbum/DoInsertAlbum2.jsp" name="chooseSlideshowForm" role="form" class="form-inline" >
-	<input type="hidden" name="input" value="${input}">
-	<input type="hidden" name="browser_selected_space_id" value="${browser_selected_space_id}">
-    <fieldset>
-	<legend>#i18n{insertalbum.chooseslideshow}</legend>
-	<#list slideshow_list as slideshow >
-	 <div class="form-group">	
-		<div class="radio">	
-			<label class="radio-inline" for="${slideshow}">
-				<input type="radio" name="slideshow" value="${slideshow}" id="${slideshow}"  > 
-				${slideshow}
-			</label>
-		</div>		
-	</div>	
-	</#list>
-	<hr>
-	<iframe id="iframeAlbum" src="" width="100%" height="400"></iframe>
-	<button type="submit" class="btn btn-primary btn-sm">
-		<i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{insertalbum.chooseslideshow}
-	</button>
-	</fieldset>
-	</form>
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12">
+		<form action="jsp/admin/plugins/insertalbum/DoInsertAlbum2.jsp" name="chooseSlideshowForm">
+		<input type="hidden" name="input" value="${input}" />
+		<input type="hidden" name="browser_selected_space_id" value="${browser_selected_space_id}" />
+		<h4>#i18n{insertalbum.chooseslideshow}</h4>
+		<#list slideshow_list as slideshow >
+		<div class="radio-inline">
+		  <label for="${slideshow}">
+			<input type="radio" name="slideshow" value="${slideshow}" id="${slideshow}" > 
+			${slideshow}
+		  </label>
+		</div>	
+		</#list>
+		<button type="submit" class="btn btn-primary btn-xs pull-right"><i class="glyphicon glyphicon-ok"></i>&nbsp;#i18n{insertalbum.chooseslideshow}</button>
+		</form>
+		<iframe id="iframe" src="" width="100%" height="400"></iframe>
+	</div>
 </div>
+
+
 <script>
 $(document).ready( function(){
-	$("input[type=radio]").click( function(e){
-		var iFrameSrc = "jsp/admin/plugins/insertalbum/DoGetSlideshow.jsp?browser_selected_space_id=${browser_selected_space_id}&slideshow=" + $(this).attr("id");
-		$("#iframeAlbum").attr("src", iFrameSrc);
-	}); 
+	$("button[type=submit]").toggle();
+	$("input[type=radio]").click( function(){
+		changeSlideshow( $(this) ); 
+		$("button[type=submit]").toggle();
+	});
+	
 });
+
+function changeSlideshow(element){
+	var iframe = document.getElementById("iframe");
+	var iFrameSrc = "jsp/admin/plugins/insertalbum/DoGetSlideshow.jsp?browser_selected_space_id=${browser_selected_space_id}";
+	var slideshowName = "Bootstrap";
+	var radios = document.forms.chooseSlideshowForm.slideshow;
+	for (var i=0; i<radios.length; i++) 
+	{
+        if (radios[i].checked)
+		{
+        	slideshowName = radios[i].value;
+        }
+     }
+	iFrameSrc += "&slideshow=" + slideshowName;
+	iframe.setAttribute("src", iFrameSrc);
+}
+
+//window.moveTo(0, 0);
+//window.resizeTo(screen.width, screen.height);
 
 </script>
