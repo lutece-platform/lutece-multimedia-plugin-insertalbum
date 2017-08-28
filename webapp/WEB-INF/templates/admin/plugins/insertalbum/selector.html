@@ -1,7 +1,7 @@
 <div class="row">
 	<div class="col-xs-12 col-sm-12 col-md-12">
 		<form action="jsp/admin/plugins/insertalbum/DoInsertAlbum2.jsp" name="chooseSlideshowForm">
-		<input type="hidden" name="input" value="${input}" />
+		<input type="hidden" name="input" value="${.data_model.input}" />
 		<input type="hidden" name="browser_selected_space_id" value="${browser_selected_space_id}" />
 		<h4>#i18n{insertalbum.chooseslideshow}</h4>
 		<#list slideshow_list as slideshow >

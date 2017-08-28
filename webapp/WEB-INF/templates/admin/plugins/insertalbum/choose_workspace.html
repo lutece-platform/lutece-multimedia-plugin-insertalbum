@@ -1,7 +1,7 @@
 <div class="row" >
 	<div class="col-xs-12 col-sm-offset-1 col-sm-10 col-md-offset-1 col-md-11">
     <form name="formMove" method="get" action="jsp/admin/plugins/insertalbum/DoInsertPopeye.jsp" >
-    	<input type="hidden" name="input" value="${input}" />
+    	<input type="hidden" name="input" value="${.data_model.input}" />
 		<fieldset>
 			<legend>#i18n{insertalbum.choose_workspace.title}</legend>
 			${spaces_browser}
