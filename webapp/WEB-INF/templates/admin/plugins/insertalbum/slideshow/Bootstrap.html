@@ -1,11 +1,12 @@
-<div id="myCarousel" class="carousel slide">
+<div id="insertAlbumCarousel${browser_selected_space_id}" class="carousel slide" data-bs-ride="carousel">
 	<div class="carousel-inner">
-		<#list images_list as image >
-		<div class="<#if image_index == 0>active </#if>item">
-			<img src="document?id=${image.id}" alt="" />
+		<#list images_list as image>
+		<div class="carousel-item<#if image?index == 0> active</#if>">
+			<img src="servlet/plugins/document/resource?id=${image.id}" class="d-block w-100" alt="">
 			<div class="carousel-caption"><p>${image.comment}</p></div>
 		</div>
 		</#list>
 	</div>
-	<a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a> <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+	<button class="carousel-control-prev" type="button" data-bs-target="#insertAlbumCarousel${browser_selected_space_id}" data-bs-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">&lsaquo;</span></button>
+	<button class="carousel-control-next" type="button" data-bs-target="#insertAlbumCarousel${browser_selected_space_id}" data-bs-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">&rsaquo;</span></button>
 </div>
