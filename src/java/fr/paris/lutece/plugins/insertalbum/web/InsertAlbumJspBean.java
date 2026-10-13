@@ -39,14 +39,16 @@ import fr.paris.lutece.plugins.document.service.spaces.DocumentSpacesService;
 import fr.paris.lutece.plugins.insertalbum.service.NoImageInWorkspaceException;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
+import fr.paris.lutece.portal.service.security.ISecurityTokenService;
+import fr.paris.lutece.portal.service.security.SecurityTokenHandler;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.web.insert.InsertServiceJspBean;
 import fr.paris.lutece.portal.web.insert.InsertServiceSelectionBean;
-import fr.paris.lutece.util.html.HtmlTemplate;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -54,183 +56,201 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.inject.spi.CDI;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
- * InsertService main class
+ * Insert service that inserts into a rich text editor a slideshow of the documents of a workspace.
  */
+@RequestScoped
 public class InsertAlbumJspBean extends InsertServiceJspBean implements InsertServiceSelectionBean
 {
-    private static final String SLIDESHOW = "slideshow";
     private static final long serialVersionUID = -3189672631047661765L;
-    private static final String TEMPLATE_SELECTOR_PAGE = "admin/plugins/insertalbum/selector.html";
-    private static final String TEMPLATE_PRESENTATION = "admin/plugins/insertalbum/presentation.html";
 
-    // template for all admin pages
-    private static final String TEMPLATE_CHOOSE_DOCUMENT = "admin/plugins/insertalbum/choose_workspace.html";
-    private static final String MARK_SPACES_BROWSER = "spaces_browser";
+    private static final String REGEX_ID = "^[\\d]+$";
+    private static final String REGEX_INPUT = "^[\\w-]+$";
+    private static final String DEFAULT_SLIDESHOWS = "Bootstrap";
+
+    private static final String PROPERTY_SLIDESHOW_LIST = "insertalbum.slideshows";
+
     private static final String PARAMETER_INPUT = "input";
-    private static final String IMAGES_LIST = "images_list";
-    private static final String BASE_URL = "baseUrl";
-    private static final String SLIDESHOWLIST = "slideshow_list";
-    private static final String TEMPLATE_PREVIEW_SLIDESHOW = "admin/plugins/insertalbum/choose_slideshow.html";
-    private AdminUser _user;
-    private String _input;
-    private String PROPERTY_SLIDESHOW_LIST = "insertalbum.slideshows";
+    private static final String PARAMETER_SLIDESHOW = "slideshow";
 
-    private void init( HttpServletRequest request )
-    {
-        _user = AdminUserService.getAdminUser( request );
-        _input = request.getParameter( PARAMETER_INPUT );
-    }
+    private static final String MARK_INPUT = "input";
+    private static final String MARK_SPACES_BROWSER = "spaces_browser";
+    private static final String MARK_SLIDESHOW_LIST = "slideshow_list";
+    private static final String MARK_IMAGES_LIST = "images_list";
+    private static final String MARK_BASE_URL = "baseUrl";
 
+    private static final String TEMPLATE_PRESENTATION = "admin/plugins/insertalbum/presentation.html";
+    private static final String TEMPLATE_CHOOSE_WORKSPACE = "admin/plugins/insertalbum/choose_workspace.html";
+    private static final String TEMPLATE_SELECTOR = "admin/plugins/insertalbum/selector.html";
+    private static final String TEMPLATE_PREVIEW_EMPTY = "admin/plugins/insertalbum/preview_empty.html";
+    private static final String TEMPLATE_SLIDESHOW = "admin/plugins/insertalbum/slideshow/%s.html";
+
+    private DocumentSpacesService _spacesService = CDI.current( ).select( DocumentSpacesService.class ).get( );
+    private ISecurityTokenService _securityTokenService = CDI.current( ).select( ISecurityTokenService.class ).get( );
+
+    /**
+     * Returns the page that opens the album selector of the plugin.
+     *
+     * @param request
+     *            the HTTP request
+     * @return the HTML of the page
+     */
+    @Override
     public String getInsertServiceSelectorUI( HttpServletRequest request )
     {
-        init( request );
+        Map<String, Object> model = new HashMap<>( );
+        model.put( MARK_INPUT, getInput( request ) );
 
-        Locale locale = AdminUserService.getLocale( request );
-        Map<String, Object> model = new HashMap<String, Object>(  );
-        model.put( PARAMETER_INPUT, _input );
-
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_PRESENTATION, locale, model );
-
-        return template.getHtml(  );
-    }
-
-    public String getSpaceBrowser( HttpServletRequest request )
-    {
-        init( request );
-
-        Map<String, Object> model = new HashMap<String, Object>(  );
-        String strSpaceId = request.getParameter( DocumentSpacesService.PARAMETER_BROWSER_SELECTED_SPACE_ID );
-
-        if ( ( strSpaceId != null ) && !strSpaceId.equals( "" ) )
-        {
-            return getSelectSlideshow( request );
-        }
-
-        Locale locale = AdminUserService.getLocale( request );
-        // Spaces browser
-        model.put( MARK_SPACES_BROWSER,
-            DocumentSpacesService.getInstance(  ).getSpacesBrowser( request, _user, locale, true, true ) );
-
-        String strBaseUrl = AppPathService.getBaseUrl( request );
-        model.put( BASE_URL, strBaseUrl );
-        model.put( PARAMETER_INPUT, _input );
-
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CHOOSE_DOCUMENT, locale, model );
-
-        return template.getHtml(  );
+        return AppTemplateService.getTemplate( TEMPLATE_PRESENTATION, AdminUserService.getLocale( request ), model ).getHtml( );
     }
 
     /**
-     * Give the user the choose of the workspace
+     * Returns the workspace browser, or the slideshow selector once a workspace is selected.
      *
-     * @param request The Http Request
-     * @return The html form.
+     * @param request
+     *            the HTTP request
+     * @param strInsertAction
+     *            the action of the controller that inserts the album
+     * @return the HTML of the page
      */
-    public String getSelectSlideshow( HttpServletRequest request )
+    public String getChooseAlbum( HttpServletRequest request, String strInsertAction )
     {
-        String slideshowListInProperties = AppPropertiesService.getProperty( PROPERTY_SLIDESHOW_LIST );
-
-        List<String> slideshowList = Arrays.asList( slideshowListInProperties.split( "," ) );
-
-        String strIdWorksapce = request.getParameter( DocumentSpacesService.PARAMETER_BROWSER_SELECTED_SPACE_ID );
-
-        Map<String, Object> model = new HashMap<String, Object>(  );
-        model.put( PARAMETER_INPUT, _input );
-        model.put( SLIDESHOWLIST, slideshowList );
-
-        String strBaseUrl = AppPathService.getBaseUrl( request );
-        model.put( BASE_URL, strBaseUrl );
-        model.put( DocumentSpacesService.PARAMETER_BROWSER_SELECTED_SPACE_ID, strIdWorksapce );
-
+        AdminUser user = AdminUserService.getAdminUser( request );
         Locale locale = AdminUserService.getLocale( request );
-        HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_SELECTOR_PAGE, locale, model );
+        String strSpaceId = request.getParameter( DocumentSpacesService.PARAMETER_BROWSER_SELECTED_SPACE_ID );
 
-        return template.getHtml(  );
+        Map<String, Object> model = new HashMap<>( );
+        model.put( MARK_INPUT, getInput( request ) );
+        model.put( MARK_BASE_URL, AppPathService.getBaseUrl( request ) );
+
+        if ( ( strSpaceId != null ) && strSpaceId.matches( REGEX_ID ) )
+        {
+            model.put( MARK_SLIDESHOW_LIST, getSlideshows( ) );
+            model.put( DocumentSpacesService.PARAMETER_BROWSER_SELECTED_SPACE_ID, strSpaceId );
+            model.put( SecurityTokenHandler.MARK_CSRF_TOKEN, _securityTokenService.getToken( request, strInsertAction ) );
+
+            return AppTemplateService.getTemplate( TEMPLATE_SELECTOR, locale, model ).getHtml( );
+        }
+
+        model.put( MARK_SPACES_BROWSER, _spacesService.getSpacesBrowser( request, user, locale, true, true ) );
+
+        return AppTemplateService.getTemplate( TEMPLATE_CHOOSE_WORKSPACE, locale, model ).getHtml( );
     }
 
-    public String doInsertLink( HttpServletRequest request )
+    /**
+     * Returns the preview of the selected slideshow.
+     *
+     * @param request
+     *            the HTTP request
+     * @return the HTML of the slideshow, or an empty state when no slideshow can be built
+     */
+    public String getSlideshowPreview( HttpServletRequest request )
     {
-        //get the name of the html tag to return to the WYNGZIG editor
+        try
+        {
+            return getSlideshowHtml( request );
+        }
+        catch( NoImageInWorkspaceException e )
+        {
+            return AppTemplateService.getTemplate( TEMPLATE_PREVIEW_EMPTY, AdminUserService.getLocale( request ), new HashMap<>( ) ).getHtml( );
+        }
+    }
+
+    /**
+     * Builds the url that inserts the selected slideshow into the calling editor field.
+     *
+     * @param request
+     *            the HTTP request
+     * @return the insertion url
+     */
+    public String getInsertAlbumUrl( HttpServletRequest request )
+    {
+        String strInsert;
+
+        try
+        {
+            strInsert = getSlideshowHtml( request );
+        }
+        catch( NoImageInWorkspaceException e )
+        {
+            strInsert = "";
+        }
+
+        return insertUrl( request, getInput( request ), StringEscapeUtils.escapeEcmaScript( strInsert ) );
+    }
+
+    /**
+     * Returns the slideshow templates configured for the plugin.
+     *
+     * @return the names of the slideshow templates
+     */
+    public static List<String> getSlideshows( )
+    {
+        return Arrays.asList( AppPropertiesService.getProperty( PROPERTY_SLIDESHOW_LIST, DEFAULT_SLIDESHOWS ).split( "," ) );
+    }
+
+    /**
+     * Returns the name of the editor field to insert into, when it is a plain identifier.
+     *
+     * @param request
+     *            the HTTP request
+     * @return the field name, or an empty string
+     */
+    private static String getInput( HttpServletRequest request )
+    {
         String strInput = request.getParameter( PARAMETER_INPUT );
 
-        try
-        {
-            HtmlTemplate template = getSlideshowTemplate( request );
-
-            return insertUrlWithoutEscape( request, strInput, template.getHtml(  ) );
-        }
-        catch ( NoImageInWorkspaceException e )
-        {
-            return insertUrlWithoutEscape( request, strInput, "" );
-        }
+        return ( ( strInput != null ) && strInput.matches( REGEX_INPUT ) ) ? strInput : StringUtils.EMPTY;
     }
 
-    public String doGetSlideshow( HttpServletRequest request )
+    /**
+     * Renders the selected slideshow with the documents of the selected workspace.
+     *
+     * @param request
+     *            the HTTP request
+     * @return the HTML of the slideshow
+     * @throws NoImageInWorkspaceException
+     *             if the workspace is unknown, not viewable by the user or holds no document, or the slideshow is unknown
+     */
+    private String getSlideshowHtml( HttpServletRequest request ) throws NoImageInWorkspaceException
     {
-        try
+        AdminUser user = AdminUserService.getAdminUser( request );
+        String strSpaceId = request.getParameter( DocumentSpacesService.PARAMETER_BROWSER_SELECTED_SPACE_ID );
+        String strSlideshow = request.getParameter( PARAMETER_SLIDESHOW );
+
+        if ( ( strSpaceId == null ) || !strSpaceId.matches( REGEX_ID ) || !getSlideshows( ).contains( strSlideshow ) )
         {
-            HtmlTemplate templateSlideshow = getSlideshowTemplate( request );
-
-            Map<String, Object> model = new HashMap<String, Object>(  );
-            Locale locale = AdminUserService.getLocale( request );
-            model.put( SLIDESHOW, templateSlideshow.getHtml(  ) );
-
-            String strBaseUrl = AppPathService.getBaseUrl( request );
-            model.put( BASE_URL, strBaseUrl );
-            model.put( PARAMETER_INPUT, _input );
-
-            HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_PREVIEW_SLIDESHOW, locale, model );
-
-            return template.getHtml(  );
-        }
-        catch ( NoImageInWorkspaceException e )
-        {
-            return "no image in workspace";
-        }
-    }
-
-    private HtmlTemplate getSlideshowTemplate( HttpServletRequest request )
-        throws NoImageInWorkspaceException
-    {
-        //get the workspace of witch we want the images
-        String strIdWorksapce = request.getParameter( DocumentSpacesService.PARAMETER_BROWSER_SELECTED_SPACE_ID );
-        int nIdWorksapce = Integer.parseInt( strIdWorksapce );
-
-        //get the name of the template (for the slideshow) to use
-        String strSlideshow = request.getParameter( SLIDESHOW );
-
-        //Collection<Image> imagesList = InsertAlbumHome.findImagesListOfWorkspace( nIdWorksapce, _plugin );
-        List<Document> documentsList = DocumentHome.findBySpaceKey( nIdWorksapce );
-
-        for ( Document doc : documentsList )
-        {
-            doc.setComment( StringEscapeUtils.escapeHtml( doc.getSummary(  ) ) );
-            doc.setComment( doc.getComment(  ).replaceAll( "'", "&#146;" ) );
+            throw new NoImageInWorkspaceException( );
         }
 
-        HtmlTemplate template = null;
+        int nIdSpace = Integer.parseInt( strSpaceId );
 
-        String strBaseUrl = AppPathService.getBaseUrl( request );
-        Locale locale = AdminUserService.getLocale( request );
-
-        Map<String, Object> model = new HashMap<String, Object>(  );
-        model.put( IMAGES_LIST, documentsList );
-        model.put( BASE_URL, strBaseUrl );
-
-        if ( ( documentsList != null ) && ( documentsList.size(  ) > 0 ) && ( strSlideshow != null ) )
+        if ( !_spacesService.isAuthorizedViewByRole( nIdSpace, user ) || !_spacesService.isAuthorizedViewByWorkgroup( nIdSpace, user ) )
         {
-            template = AppTemplateService.getTemplate( "admin/plugins/insertalbum/slideshow/" + strSlideshow + ".html",
-                    locale, model );
-        }
-        else
-        {
-            throw new NoImageInWorkspaceException(  );
+            throw new NoImageInWorkspaceException( );
         }
 
-        return template;
+        List<Document> listDocuments = DocumentHome.findBySpaceKey( nIdSpace );
+
+        if ( listDocuments.isEmpty( ) )
+        {
+            throw new NoImageInWorkspaceException( );
+        }
+
+        for ( Document document : listDocuments )
+        {
+            document.setComment( StringEscapeUtils.escapeHtml4( StringUtils.defaultString( document.getSummary( ) ) ).replace( "'", "&#39;" ) );
+        }
+
+        Map<String, Object> model = new HashMap<>( );
+        model.put( MARK_IMAGES_LIST, listDocuments );
+        model.put( DocumentSpacesService.PARAMETER_BROWSER_SELECTED_SPACE_ID, strSpaceId );
+        model.put( MARK_BASE_URL, AppPathService.getBaseUrl( request ) );
+
+        return AppTemplateService.getTemplate( String.format( TEMPLATE_SLIDESHOW, strSlideshow ), AdminUserService.getLocale( request ), model ).getHtml( );
     }
 }

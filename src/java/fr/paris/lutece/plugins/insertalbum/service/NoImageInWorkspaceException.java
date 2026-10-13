@@ -33,6 +33,9 @@
  */
 package fr.paris.lutece.plugins.insertalbum.service;
 
+/**
+ * Thrown when no slideshow can be built from the selected workspace.
+ */
 public class NoImageInWorkspaceException extends Exception
 {
     private static final long serialVersionUID = -5880904291839851870L;

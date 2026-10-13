@@ -1,12 +1,14 @@
-<div class="insert-service" >
-    <h2>#i18n{insertalbum.introduction.title}</h2>
-    <form method="get" action="jsp/admin/plugins/insertalbum/DoInsertAlbum.jsp" id="myForm">
-    	<input type="hidden" name="input" value="${.data_model.input}" />
-        <input type="submit" value="#i18n{insertalbum.begin}" />
-    </form>
-    <script>
-		window.onload=function() {
-			document.forms.myForm.submit();
-		}
-    </script>
-</div>
+<@row class='mt-3'>
+	<@columns>
+		<@tform name='insertAlbumStart' id='insertAlbumStart' method='get' action='jsp/admin/plugins/insertalbum/InsertAlbum.jsp'>
+			<@input type='hidden' name='input' value=.data_model.input! />
+			<h2>#i18n{insertalbum.introduction.title}</h2>
+			<@button type='submit' title='#i18n{insertalbum.begin}' buttonIcon='player-play' />
+		</@tform>
+	</@columns>
+</@row>
+<script>
+document.addEventListener( 'DOMContentLoaded', function( ) {
+	document.getElementById( 'insertAlbumStart' ).submit( );
+} );
+</script>
